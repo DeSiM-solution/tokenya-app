@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors, fonts, radii } from '../constants/tokens';
 
 function fmtJPY(n: number): string {
-  return '¥' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return '¥' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 interface Props {

@@ -7,6 +7,7 @@ export interface TopUp {
   created_at: number;
 }
 
+// Used by T9: 使用状況・請求書画面
 export async function getTopUps(): Promise<TopUp[]> {
   const res = await apiClient.get('/api/user/self/topup');
   return res.data.data ?? [];
