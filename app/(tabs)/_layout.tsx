@@ -18,7 +18,7 @@ export default function TabLayout() {
         tabBarLabelStyle: {
           fontFamily: fonts.jpBody,
           fontSize: 10,
-          letterSpacing: 0.6,
+          letterSpacing: 0.4,
         },
       }}
     >
