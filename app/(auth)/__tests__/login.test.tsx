@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import LoginScreen from '../login';
+import { useAuthStore } from '../../../src/store/auth';
 
 jest.mock('../../../src/api/auth', () => ({
   loginUser: jest.fn().mockResolvedValue('test-token'),
@@ -12,6 +13,10 @@ jest.mock('../../../src/utils/secure-store', () => ({
 jest.mock('expo-router', () => ({ router: { replace: jest.fn() } }));
 
 describe('LoginScreen', () => {
+  beforeEach(() => {
+    useAuthStore.setState({ token: null, user: null, isAuthenticated: false });
+  });
+
   it('メールとパスワード入力欄が表示される', () => {
     const { getByPlaceholderText } = render(<LoginScreen />);
     expect(getByPlaceholderText('メールアドレス')).toBeTruthy();

@@ -40,7 +40,7 @@ export default function RootLayout() {
       }
       await SplashScreen.hideAsync();
     })();
-  }, [loaded]);
+  }, [loaded, setAuth]);
 
   // 認証状態に応じてリダイレクト
   useEffect(() => {
