@@ -5,6 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { secureStore } from '../src/utils/secure-store';
 import { useAuthStore } from '../src/store/auth';
 import { getSelfInfo } from '../src/api/auth';
+import { requestNotificationPermission } from '../src/utils/notifications';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,6 +40,7 @@ export default function RootLayout() {
         }
       }
       await SplashScreen.hideAsync();
+      requestNotificationPermission(); // ノンブロッキング
     })();
   }, [loaded, setAuth]);
 
