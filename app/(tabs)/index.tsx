@@ -58,7 +58,7 @@ export default function HomeScreen() {
           ))}
         </View>
 
-        <Text style={styles.sectionH}>最近の使用</Text>
+        <Text style={styles.sectionH}>最近のリクエスト</Text>
         <ActivityList items={MOCK_ACTIVITY} />
       </ScrollView>
     </SafeAreaView>

@@ -34,7 +34,7 @@ export default function KeysScreen() {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.header}>
-        <Text style={styles.title}>API キー</Text>
+        <Text style={styles.title}>APIキー</Text>
         <TouchableOpacity style={styles.newBtn} onPress={() => router.push('/modals/new-key')}>
           <Text style={styles.newBtnTxt}>＋ 新規作成</Text>
         </TouchableOpacity>

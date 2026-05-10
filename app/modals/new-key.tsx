@@ -25,7 +25,7 @@ export default function NewKeyModal() {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.content}>
-        <Text style={styles.title}>新規 API キー</Text>
+        <Text style={styles.title}>新規APIキー</Text>
         <Text style={styles.label}>キー名</Text>
         <TextInput
           style={styles.input}
