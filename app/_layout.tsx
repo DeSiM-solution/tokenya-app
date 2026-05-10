@@ -10,18 +10,11 @@ import { requestNotificationPermission } from '../src/utils/notifications';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  // Font files are downloaded in Task 12; fall back to loaded=true until then
-  let loaded = true;
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    [loaded] = useFonts({
-      ShipporiMincho:   require('../assets/fonts/ShipporiMincho-Bold.ttf'),
-      ZenKakuGothicNew: require('../assets/fonts/ZenKakuGothicNew-Regular.ttf'),
-      JetBrainsMono:    require('../assets/fonts/JetBrainsMono-Regular.ttf'),
-    });
-  } catch {
-    loaded = true;
-  }
+  const [loaded] = useFonts({
+    ShipporiMincho:   require('../assets/fonts/ShipporiMincho-Bold.ttf'),
+    ZenKakuGothicNew: require('../assets/fonts/ZenKakuGothicNew-Regular.ttf'),
+    JetBrainsMono:    require('../assets/fonts/JetBrainsMono-Regular.ttf'),
+  });
 
   const { setAuth, isAuthenticated } = useAuthStore();
   const segments = useSegments();
