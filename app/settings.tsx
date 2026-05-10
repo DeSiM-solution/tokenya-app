@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { useAuthStore } from '../src/store/auth';
 import { useBalanceStore } from '../src/store/balance';
 import { secureStore } from '../src/utils/secure-store';
@@ -27,59 +28,35 @@ function SettingsGroup({ title, children }: { title: string; children: React.Rea
   );
 }
 
-function SettingsRow({
-  label,
-  meta,
-  value,
-  valueColor,
-  onPress,
-  isLast,
-}: {
-  label: string;
-  meta?: string;
-  value?: string;
-  valueColor?: string;
-  onPress?: () => void;
-  isLast?: boolean;
+function SettingsRow({ icon, label, meta, value, valueColor, onPress, isLast }: {
+  icon: string; label: string; meta?: string; value?: string; valueColor?: string; onPress?: () => void; isLast?: boolean;
 }) {
   return (
-    <TouchableOpacity
-      style={[styles.row, isLast && styles.rowLast]}
-      onPress={onPress ?? (() => {})}
-      activeOpacity={0.7}
-    >
+    <TouchableOpacity style={[styles.row, isLast && styles.rowLast]} onPress={onPress ?? (() => {})} activeOpacity={0.7}>
+      <View style={styles.iconWrap}>
+        <Feather name={icon as any} size={16} color={colors.textMuted} />
+      </View>
       <View style={styles.rowInfo}>
         <Text style={styles.rowName}>{label}</Text>
-        {meta ? <Text style={styles.rowMeta}>{meta}</Text> : null}
+        {meta && <Text style={styles.rowMeta}>{meta}</Text>}
       </View>
-      {value ? (
-        <Text style={[styles.rowValue, valueColor ? { color: valueColor } : null]}>
-          {value}
-        </Text>
-      ) : null}
-      {onPress ? <Text style={styles.chevron}>›</Text> : null}
+      {value && <Text style={[styles.rowValue, valueColor ? { color: valueColor } : undefined]}>{value}</Text>}
+      {onPress && <Text style={styles.chevron}>›</Text>}
     </TouchableOpacity>
   );
 }
 
-function ToggleRow({
-  label,
-  meta,
-  value,
-  onValueChange,
-  isLast,
-}: {
-  label: string;
-  meta?: string;
-  value: boolean;
-  onValueChange: (v: boolean) => void;
-  isLast?: boolean;
+function ToggleRow({ icon, label, meta, value, onValueChange, isLast }: {
+  icon: string; label: string; meta?: string; value: boolean; onValueChange: (v: boolean) => void; isLast?: boolean;
 }) {
   return (
     <View style={[styles.row, isLast && styles.rowLast]}>
+      <View style={styles.iconWrap}>
+        <Feather name={icon as any} size={16} color={colors.textMuted} />
+      </View>
       <View style={styles.rowInfo}>
         <Text style={styles.rowName}>{label}</Text>
-        {meta ? <Text style={styles.rowMeta}>{meta}</Text> : null}
+        {meta && <Text style={styles.rowMeta}>{meta}</Text>}
       </View>
       <Switch
         value={value}
@@ -151,10 +128,12 @@ export default function SettingsScreen() {
         {/* アカウント group */}
         <SettingsGroup title="アカウント">
           <SettingsRow
+            icon="user"
             label="プロフィール情報"
             onPress={() => {}}
           />
           <SettingsRow
+            icon="shield"
             label="2 段階認証"
             meta="SMS · 認証アプリ"
             value="有効"
@@ -162,6 +141,7 @@ export default function SettingsScreen() {
             onPress={() => {}}
           />
           <SettingsRow
+            icon="credit-card"
             label="お支払方法"
             meta="JCB **** 4242"
             onPress={() => {}}
@@ -172,18 +152,21 @@ export default function SettingsScreen() {
         {/* 通知 group */}
         <SettingsGroup title="通知">
           <ToggleRow
+            icon="bell"
             label="プッシュ通知"
             meta="残高低下・ティア変更"
             value={pushEnabled}
             onValueChange={setPushEnabled}
           />
           <ToggleRow
+            icon="mail"
             label="月次サマリーメール"
             meta="毎月 1 日に送付"
             value={summaryEnabled}
             onValueChange={setSummaryEnabled}
           />
           <ToggleRow
+            icon="alert-triangle"
             label="異常使用量アラート"
             meta="前日比 +200% で通知"
             value={alertEnabled}
@@ -195,10 +178,12 @@ export default function SettingsScreen() {
         {/* アプリについて group */}
         <SettingsGroup title="アプリについて">
           <SettingsRow
+            icon="info"
             label="バージョン"
             value="1.0.0"
           />
           <SettingsRow
+            icon="github"
             label="AGPL-3.0 ソースコード"
             value="GitHub"
             valueColor={colors.cyan}
@@ -252,6 +237,7 @@ const styles = StyleSheet.create({
   // Settings row
   row:            { flexDirection: 'row', alignItems: 'center', padding: 14, borderBottomWidth: 1, borderBottomColor: colors.line },
   rowLast:        { borderBottomWidth: 0 },
+  iconWrap:       { width: 28, alignItems: 'center', marginRight: 4 },
   rowInfo:        { flex: 1 },
   rowName:        { fontFamily: fonts.jpBody, fontSize: 14, color: colors.text },
   rowMeta:        { fontFamily: fonts.mono, fontSize: 11, color: colors.textMuted, marginTop: 2 },
