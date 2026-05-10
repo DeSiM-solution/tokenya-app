@@ -6,6 +6,10 @@ export interface ApiKey {
   key:        string;
   models:     string[];
   created_at: number;
+  status?:    number;      // 1 = active (default), 0 = disabled
+  today_jpy?: number;
+  month_jpy?: number;
+  last_used?: number | null; // unix timestamp or null
 }
 
 export async function listKeys(): Promise<ApiKey[]> {
