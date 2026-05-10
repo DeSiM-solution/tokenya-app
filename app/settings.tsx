@@ -134,7 +134,7 @@ export default function SettingsScreen() {
           />
           <SettingsRow
             icon="shield"
-            label="2 段階認証"
+            label="2段階認証"
             meta="SMS · 認証アプリ"
             value="有効"
             valueColor={colors.cyan}
@@ -142,7 +142,7 @@ export default function SettingsScreen() {
           />
           <SettingsRow
             icon="credit-card"
-            label="お支払方法"
+            label="お支払い方法"
             meta="JCB **** 4242"
             onPress={() => {}}
             isLast
