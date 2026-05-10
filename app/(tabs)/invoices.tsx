@@ -41,7 +41,7 @@ function InvoiceCard({ invoice, onDownload }: InvoiceCardProps) {
       <View style={cardStyles.row}>
         <View style={cardStyles.labelWrap}>
           <Text style={cardStyles.label}>
-            {isPending ? `${label}(進行中)` : label}
+            {isPending ? `${label}（進行中）` : label}
           </Text>
         </View>
         <View style={cardStyles.amountWrap}>
@@ -147,7 +147,7 @@ const cardStyles = StyleSheet.create({
 function EmailConfigSection({ config }: { config: InvoiceEmailConfig }) {
   return (
     <View style={emailStyles.container}>
-      <Text style={emailStyles.header}>→ 自動送付先</Text>
+      <Text style={emailStyles.header}>→ メール送付先</Text>
       <Text style={emailStyles.email}>{config.email}</Text>
       <Text style={emailStyles.meta}>
         毎月 1 日に PDF を自動でメール送付します
