@@ -7,7 +7,7 @@ import { useAuthStore } from '../../src/store/auth';
 import BalanceCard from '../../src/components/BalanceCard';
 import UsageCard from '../../src/components/UsageCard';
 import ActivityList, { type Activity } from '../../src/components/ActivityList';
-import { colors, fonts } from '../../src/constants/tokens';
+import { colors, fonts, radii } from '../../src/constants/tokens';
 
 // 実 API が繋がるまでのプレースホルダー
 const MOCK_ACTIVITY: Activity[] = [
@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
   greet:      { fontFamily: fonts.jpBody, fontSize: 13, color: colors.textMuted },
   title:      { fontFamily: fonts.jpDisplay, fontSize: 20, fontWeight: '700', color: colors.text },
   ya:         { color: colors.vermilion },
-  avatar:     { width: 36, height: 36, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.lineStrong, alignItems: 'center', justifyContent: 'center' },
+  avatar:     { width: 36, height: 36, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.lineStrong, borderRadius: radii.sm, alignItems: 'center', justifyContent: 'center' },
   avatarTxt:  { fontFamily: fonts.jpDisplay, fontSize: 14, fontWeight: '700', color: colors.text },
   sectionH:   { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 2.5, textTransform: 'uppercase', color: colors.textDim, marginTop: 28, marginBottom: 14 },
   quickGrid:  { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  quickItem:  { flex: 1, minWidth: '40%', backgroundColor: colors.ink2, borderWidth: 1, borderColor: colors.line, padding: 16, alignItems: 'center' },
+  quickItem:  { flex: 1, minWidth: '40%', backgroundColor: colors.ink2, borderWidth: 1, borderColor: colors.line, borderRadius: radii.button, padding: 16, alignItems: 'center' },
   quickLabel: { fontFamily: fonts.jpBody, fontSize: 12, color: colors.text, letterSpacing: 0.5 },
 });

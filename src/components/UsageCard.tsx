@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, fonts } from '../constants/tokens';
+import { colors, fonts, radii } from '../constants/tokens';
 import { formatTokens } from '../utils/format';
 
 interface Props { usedTokens: number; totalTokens: number }
@@ -25,7 +25,7 @@ export default function UsageCard({ usedTokens, totalTokens }: Props) {
 }
 
 const styles = StyleSheet.create({
-  card:   { backgroundColor: colors.ink2, borderWidth: 1, borderColor: colors.line, padding: 18, marginTop: 14 },
+  card:   { backgroundColor: colors.ink2, borderWidth: 1, borderColor: colors.line, borderRadius: radii.card, padding: 18, marginTop: 14 },
   top:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 },
   amount: { fontFamily: fonts.jpDisplay, fontSize: 24, fontWeight: '700', color: colors.text },
   of:     { fontFamily: fonts.mono, fontSize: 13, color: colors.textDim, fontWeight: '400' },
