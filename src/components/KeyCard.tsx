@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { colors, fonts, radii } from '../constants/tokens';
@@ -10,11 +10,16 @@ interface Props { apiKey: ApiKey; onDelete: (id: number) => void }
 export default function KeyCard({ apiKey, onDelete }: Props) {
   const [copied, setCopied] = useState(false);
 
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleCopy = async () => {
     await Clipboard.setStringAsync(apiKey.key);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setCopied(false), 2000);
   };
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
   const handleDelete = () => {
     Alert.alert(

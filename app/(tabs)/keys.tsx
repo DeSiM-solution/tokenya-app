@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { listKeys, deleteKey, type ApiKey } from '../../src/api/keys';
 import KeyCard from '../../src/components/KeyCard';
 import { colors, fonts, radii } from '../../src/constants/tokens';
@@ -15,12 +15,12 @@ export default function KeysScreen() {
     try { setKeys(await listKeys()); } finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, []);
+  useFocusEffect(useCallback(() => { load(); }, []));
 
   const handleDelete = async (id: number) => {
     try {
       await deleteKey(id);
-      load();
+      await load();
     } catch {
       Alert.alert('エラー', 'APIキーを削除できませんでした。もう一度お試しください。');
     }
