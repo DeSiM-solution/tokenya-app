@@ -1,5 +1,6 @@
 export function formatJPY(amount: number): string {
-  return '¥' + new Intl.NumberFormat('en-US').format(amount);
+  const formatted = Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return '¥' + formatted;
 }
 
 export function formatDate(unixSec: number): string {

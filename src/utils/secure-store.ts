@@ -4,7 +4,11 @@ const TOKEN_KEY = 'tokenya_jwt';
 
 export const secureStore = {
   async getToken(): Promise<string | null> {
-    return SecureStore.getItemAsync(TOKEN_KEY);
+    try {
+      return await SecureStore.getItemAsync(TOKEN_KEY);
+    } catch {
+      return null;
+    }
   },
   async setToken(token: string): Promise<void> {
     await SecureStore.setItemAsync(TOKEN_KEY, token);
