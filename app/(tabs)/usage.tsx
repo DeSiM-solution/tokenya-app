@@ -10,15 +10,19 @@ export default function UsageScreen() {
   const [totalTokens, setTotalTokens]   = useState(0);
   const [totalCostJPY, setTotalCostJPY] = useState(0);
   const [loading, setLoading]           = useState(true);
+  const [error, setError]               = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
+      setError(null);
       try {
         const d = await getUsageSummary();
         setByModel(d.byModel);
         setTotalTokens(d.totalTokens);
         setTotalCostJPY(d.totalCostJPY);
+      } catch {
+        setError('データの取得に失敗しました。');
       } finally { setLoading(false); }
     })();
   }, []);
@@ -31,15 +35,16 @@ export default function UsageScreen() {
         <View style={styles.totalsRow}>
           <View style={styles.totalCard}>
             <Text style={styles.totalLabel}>合計トークン</Text>
-            <Text style={styles.totalValue}>{formatTokens(totalTokens)}</Text>
+            <Text style={styles.totalValue}>{loading ? '—' : formatTokens(totalTokens)}</Text>
           </View>
           <View style={styles.totalCard}>
             <Text style={styles.totalLabel}>合計費用</Text>
-            <Text style={styles.totalValue}>{formatJPY(totalCostJPY)}</Text>
+            <Text style={styles.totalValue}>{loading ? '—' : formatJPY(totalCostJPY)}</Text>
           </View>
         </View>
 
         <Text style={styles.sectionH}>モデル別</Text>
+        {error && <Text style={styles.errorText}>{error}</Text>}
         {loading
           ? <ActivityIndicator color={colors.vermilion} />
           : (
@@ -80,4 +85,5 @@ const styles = StyleSheet.create({
   modelTokens: { fontFamily: fonts.mono, fontSize: 11, color: colors.textMuted },
   modelCost:   { fontFamily: fonts.mono, fontSize: 13, color: colors.vermilion, marginTop: 2 },
   empty:       { fontFamily: fonts.jpBody, fontSize: 14, color: colors.textMuted, textAlign: 'center', padding: 40 },
+  errorText:   { fontFamily: fonts.jpBody, fontSize: 13, color: colors.vermilion, textAlign: 'center', marginTop: 20 },
 });
