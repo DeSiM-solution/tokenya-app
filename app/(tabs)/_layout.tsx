@@ -1,4 +1,5 @@
 import { Tabs } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
 import { colors, fonts } from '../../src/constants/tokens';
 
 export default function TabLayout() {
@@ -22,11 +23,11 @@ export default function TabLayout() {
         },
       }}
     >
-      <Tabs.Screen name="index"    options={{ title: 'ホーム' }} />
-      <Tabs.Screen name="charge"   options={{ title: 'チャージ' }} />
-      <Tabs.Screen name="keys"     options={{ title: 'APIキー' }} />
-      <Tabs.Screen name="usage"    options={{ title: '使用状況' }} />
-      <Tabs.Screen name="invoices" options={{ title: '請求書' }} />
+      <Tabs.Screen name="index"    options={{ title: 'ホーム',   tabBarIcon: ({ color, size }) => <Feather name="home"        color={color} size={size} /> }} />
+      <Tabs.Screen name="charge"   options={{ title: 'チャージ', tabBarIcon: ({ color, size }) => <Feather name="credit-card" color={color} size={size} /> }} />
+      <Tabs.Screen name="keys"     options={{ title: 'キー',     tabBarIcon: ({ color, size }) => <Feather name="key"         color={color} size={size} /> }} />
+      <Tabs.Screen name="usage"    options={{ title: '使用',     tabBarIcon: ({ color, size }) => <Feather name="bar-chart-2" color={color} size={size} /> }} />
+      <Tabs.Screen name="invoices" options={{ title: '請求',     tabBarIcon: ({ color, size }) => <Feather name="file-text"   color={color} size={size} /> }} />
     </Tabs>
   );
 }
