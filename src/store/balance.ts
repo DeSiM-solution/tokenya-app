@@ -12,9 +12,13 @@ interface BalanceState {
   refresh: () => Promise<void>;
 }
 
-function resolveTier(balanceJPY: number): Tier {
-  if (balanceJPY >= 30000) return 'Gold';
-  if (balanceJPY >= 10000) return 'Silver';
+// new-api quota units: 500,000 quota = $1 USD; exchange rate ~156.805154 JPY/USD
+const QUOTA_PER_JPY = 500000 / 156.805154; // ≈ 3189
+
+function groupToTier(group: string): Tier {
+  const g = (group ?? '').toLowerCase();
+  if (g === 'gold') return 'Gold';
+  if (g === 'silver') return 'Silver';
   return 'Bronze';
 }
 
@@ -29,14 +33,12 @@ export const useBalanceStore = create<BalanceState>((set) => ({
     try {
       const res = await apiClient.get('/api/user/self');
       const d = res.data.data;
-      // ⚠️ TODO: new-api の quota 単位を確認してから換算係数を決定すること。
-      // 現在は仮換算: quota / 500 ≒ JPY
-      const balanceJPY = Math.floor((d.quota ?? 0) / 500);
+      const balanceJPY = Math.round((d.quota ?? 0) / QUOTA_PER_JPY);
       set({
         balanceJPY,
         usedTokens: d.used_quota ?? 0,
         totalTokens: (d.quota ?? 0) + (d.used_quota ?? 0),
-        tier: resolveTier(balanceJPY),
+        tier: groupToTier(d.group ?? ''),
         loading: false,
       });
     } catch {

@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, ActivityIndicator,
-  Linking, TouchableOpacity,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  listInvoices, getInvoiceURL, getInvoiceEmailConfig,
+  listInvoices, fetchInvoiceHTML, getInvoiceEmailConfig,
   type Invoice, type InvoiceEmailConfig,
 } from '../../src/api/invoices';
-import { secureStore } from '../../src/utils/secure-store';
+import InvoiceWebViewModal from '../../src/components/InvoiceWebViewModal';
 import { formatJPY } from '../../src/utils/format';
 import { colors, fonts, radii, spacing } from '../../src/constants/tokens';
+
+const INVOICE_REG_NUMBER =
+  process.env.EXPO_PUBLIC_INVOICE_REGISTRATION_NUMBER ?? 'T5011101087821';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -41,7 +44,7 @@ function InvoiceCard({ invoice, onDownload }: InvoiceCardProps) {
       <View style={cardStyles.row}>
         <View style={cardStyles.labelWrap}>
           <Text style={cardStyles.label}>
-            {isPending ? `${label}(進行中)` : label}
+            {isPending ? `${label}（進行中）` : label}
           </Text>
         </View>
         <View style={cardStyles.amountWrap}>
@@ -147,7 +150,7 @@ const cardStyles = StyleSheet.create({
 function EmailConfigSection({ config }: { config: InvoiceEmailConfig }) {
   return (
     <View style={emailStyles.container}>
-      <Text style={emailStyles.header}>→ 自動送付先</Text>
+      <Text style={emailStyles.header}>→ メール送付先</Text>
       <Text style={emailStyles.email}>{config.email}</Text>
       <Text style={emailStyles.meta}>
         毎月 1 日に PDF を自動でメール送付します
@@ -204,6 +207,7 @@ export default function InvoicesScreen() {
   const [emailConfig, setEmailConfig] = useState<InvoiceEmailConfig | null>(null);
   const [loading,     setLoading]     = useState(true);
   const [error,       setError]       = useState<string | null>(null);
+  const [openInvoice, setOpenInvoice] = useState<{ no: string; html: string } | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -225,9 +229,14 @@ export default function InvoicesScreen() {
   }, []);
 
   const handleDownload = async (invoiceNo: string) => {
-    const token = await secureStore.getToken();
-    const url   = getInvoiceURL(invoiceNo) + (token ? `?access_token=${token}` : '');
-    await Linking.openURL(url);
+    try {
+      // Fetch via authorized API client (Authorization header) and render in-app
+      // so the JWT never appears in a URL query string, server log, or browser history.
+      const html = await fetchInvoiceHTML(invoiceNo);
+      setOpenInvoice({ no: invoiceNo, html });
+    } catch {
+      setError('請求書の表示に失敗しました。');
+    }
   };
 
   // Group by year (descending)
@@ -246,7 +255,7 @@ export default function InvoicesScreen() {
       <View style={styles.badge}>
         <Text style={styles.badgeDot}>◆</Text>
         <Text style={styles.badgeTxt}>
-          適格請求書発行事業者 · T5011101087821
+          適格請求書発行事業者 · {INVOICE_REG_NUMBER}
         </Text>
       </View>
 
@@ -275,6 +284,14 @@ export default function InvoicesScreen() {
 
           {emailConfig && <EmailConfigSection config={emailConfig} />}
         </ScrollView>
+      )}
+
+      {openInvoice && (
+        <InvoiceWebViewModal
+          html={openInvoice.html}
+          invoiceNo={openInvoice.no}
+          onClose={() => setOpenInvoice(null)}
+        />
       )}
     </SafeAreaView>
   );

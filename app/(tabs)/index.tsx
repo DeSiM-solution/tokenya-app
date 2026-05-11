@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,14 +7,10 @@ import { useAuthStore } from '../../src/store/auth';
 import BalanceCard from '../../src/components/BalanceCard';
 import UsageCard from '../../src/components/UsageCard';
 import ActivityList, { type Activity } from '../../src/components/ActivityList';
+import { apiClient } from '../../src/api/client';
 import { colors, fonts, radii } from '../../src/constants/tokens';
 
-// 実 API が繋がるまでのプレースホルダー
-const MOCK_ACTIVITY: Activity[] = [
-  { id: 1, model: 'claude-opus-4',  tokens: 12400, costJPY: 248, createdAt: 1737000000 },
-  { id: 2, model: 'gpt-4o',         tokens:  5200, costJPY: 104, createdAt: 1736990000 },
-  { id: 3, model: 'gemini-2.5-pro', tokens:  3100, costJPY:  62, createdAt: 1736980000 },
-];
+const QUOTA_PER_JPY = 500000 / 156.805154;
 
 const QUICK = [
   { label: 'チャージ',   route: '/(tabs)/charge'   },
@@ -26,9 +22,31 @@ const QUICK = [
 export default function HomeScreen() {
   const { balanceJPY, tier, usedTokens, totalTokens, refresh } = useBalanceStore();
   const { user } = useAuthStore();
+  const [activities, setActivities] = useState<Activity[]>([]);
 
+  useEffect(() => {
+    refresh();
+    fetchRecentActivity();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { refresh(); }, []);
+  }, []);
+
+  const fetchRecentActivity = async () => {
+    try {
+      const res = await apiClient.get('/api/log/self', { params: { p: 1, page_size: 5 } });
+      const items = res.data?.data?.items ?? [];
+      setActivities(
+        items.map((item: { id: number; model_name: string; prompt_tokens: number; completion_tokens: number; quota: number; created_at: number }) => ({
+          id: item.id,
+          model: item.model_name,
+          tokens: (item.prompt_tokens ?? 0) + (item.completion_tokens ?? 0),
+          costJPY: Math.round((item.quota ?? 0) / QUOTA_PER_JPY),
+          createdAt: item.created_at,
+        }))
+      );
+    } catch {
+      // silent — leave empty list on error
+    }
+  };
 
   return (
     <SafeAreaView style={styles.root}>
@@ -59,7 +77,7 @@ export default function HomeScreen() {
         </View>
 
         <Text style={styles.sectionH}>最近のリクエスト</Text>
-        <ActivityList items={MOCK_ACTIVITY} />
+        <ActivityList items={activities} />
       </ScrollView>
     </SafeAreaView>
   );

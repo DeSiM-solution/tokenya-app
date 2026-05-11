@@ -49,7 +49,7 @@ export default function KeysScreen() {
               <>
                 {/* Active section */}
                 <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>アクティブ({active.length})</Text>
+                  <Text style={styles.sectionTitle}>{`アクティブ（${active.length}）`}</Text>
                   <Text style={styles.sectionTotal}>合計 {formatJPY(monthTotal)} / 今月</Text>
                 </View>
                 {active.map((k) => (
@@ -60,7 +60,7 @@ export default function KeysScreen() {
                 {inactive.length > 0 && (
                   <>
                     <View style={[styles.sectionHeader, styles.sectionHeaderInactive]}>
-                      <Text style={styles.sectionTitle}>無効({inactive.length})</Text>
+                      <Text style={styles.sectionTitle}>{`無効（${inactive.length}）`}</Text>
                     </View>
                     {inactive.map((k) => (
                       <KeyCard key={k.id} apiKey={k} onDelete={handleDelete} />
