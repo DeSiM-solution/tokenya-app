@@ -25,7 +25,15 @@ export async function getInvoiceEmailConfig(): Promise<InvoiceEmailConfig | null
   } catch { return null; }
 }
 
-export function getInvoiceURL(invoiceNo: string): string {
-  const base = process.env.EXPO_PUBLIC_API_URL ?? 'https://api.tokenya.ai';
-  return `${base}/api/user/self/invoices/${invoiceNo}`;
+// fetchInvoiceHTML retrieves the rendered 適格請求書 HTML for in-app display.
+// Uses the standard Bearer Authorization header (via apiClient interceptor) so
+// the JWT never appears in a URL query string, server access log, or browser
+// history (the system browser used by Linking.openURL cannot attach headers).
+export async function fetchInvoiceHTML(invoiceNo: string): Promise<string> {
+  const res = await apiClient.get<string>(`/api/user/self/invoices/${encodeURIComponent(invoiceNo)}`, {
+    headers: { Accept: 'text/html' },
+    responseType: 'text',
+    transformResponse: [(data) => data as string],
+  });
+  return res.data;
 }
