@@ -76,19 +76,34 @@ export default function LoginScreen() {
             : <Text style={styles.btnText}>ログイン</Text>
           }
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.link} onPress={() => router.push('/(auth)/forgot-password')}>
+          <Text style={styles.linkText}>パスワードをお忘れですか？</Text>
+        </TouchableOpacity>
+
+        <View style={styles.divider} />
+
+        <TouchableOpacity style={styles.registerBtn} onPress={() => router.push('/(auth)/register')}>
+          <Text style={styles.registerText}>新規登録 →</Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  root:    { flex: 1, backgroundColor: colors.ink },
-  inner:   { flex: 1, justifyContent: 'center', padding: 32 },
-  logo:    { fontFamily: fonts.jpDisplay, fontSize: 40, fontWeight: '800', color: colors.text, textAlign: 'center', marginBottom: 8 },
-  ya:      { color: colors.vermilion },
-  sub:     { fontFamily: fonts.jpBody, fontSize: 13, color: colors.textMuted, textAlign: 'center', letterSpacing: 1, marginBottom: 48 },
-  input:   { borderWidth: 1, borderColor: colors.lineStrong, backgroundColor: colors.ink2, color: colors.text, fontFamily: fonts.jpBody, fontSize: 15, padding: 14, marginBottom: 12 },
-  error:   { fontFamily: fonts.jpBody, fontSize: 13, color: colors.vermilion, marginBottom: 12 },
-  btn:     { backgroundColor: colors.vermilion, padding: 16, alignItems: 'center', marginTop: 8 },
-  btnText: { fontFamily: fonts.jpBody, fontSize: 15, fontWeight: '700', color: colors.ink, letterSpacing: 1 },
+  root:        { flex: 1, backgroundColor: colors.ink },
+  inner:       { flex: 1, justifyContent: 'center', padding: 32 },
+  logo:        { fontFamily: fonts.jpDisplay, fontSize: 40, fontWeight: '800', color: colors.text, textAlign: 'center', marginBottom: 8 },
+  ya:          { color: colors.vermilion },
+  sub:         { fontFamily: fonts.jpBody, fontSize: 13, color: colors.textMuted, textAlign: 'center', letterSpacing: 1, marginBottom: 48 },
+  input:       { borderWidth: 1, borderColor: colors.lineStrong, backgroundColor: colors.ink2, color: colors.text, fontFamily: fonts.jpBody, fontSize: 15, padding: 14, marginBottom: 12 },
+  error:       { fontFamily: fonts.jpBody, fontSize: 13, color: colors.vermilion, marginBottom: 12 },
+  btn:         { backgroundColor: colors.vermilion, padding: 16, alignItems: 'center', marginTop: 8 },
+  btnText:     { fontFamily: fonts.jpBody, fontSize: 15, fontWeight: '700', color: colors.ink, letterSpacing: 1 },
+  link:        { alignItems: 'center', marginTop: 20 },
+  linkText:    { fontFamily: fonts.jpBody, fontSize: 13, color: colors.textMuted },
+  divider:     { borderTopWidth: 1, borderTopColor: colors.line, marginVertical: 24 },
+  registerBtn: { alignItems: 'center' },
+  registerText:{ fontFamily: fonts.jpBody, fontSize: 14, fontWeight: '700', color: colors.vermilion, letterSpacing: 0.5 },
 });
