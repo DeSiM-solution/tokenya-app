@@ -16,7 +16,7 @@ import {
   type Period,
 } from '../../src/api/usage';
 import { colors, fonts, radii, spacing } from '../../src/constants/tokens';
-import { formatJPY, formatTokens } from '../../src/utils/format';
+import { formatTokens } from '../../src/utils/format';
 
 // ─── Period tabs ────────────────────────────────────────────────────────────
 
@@ -81,7 +81,7 @@ function BarChart({ daily, totalCostJPY }: BarChartProps) {
       <View style={chartStyles.titleRow}>
         <Text style={chartStyles.chartTitle}>日別 — 直近 14 日</Text>
         {totalCostJPY > 0 && (
-          <Text style={chartStyles.chartMeta}>{formatJPY(totalCostJPY)} / 月</Text>
+          <Text style={chartStyles.chartMeta}>{totalCostJPY.toLocaleString('ja-JP')} pts / 月</Text>
         )}
       </View>
 
@@ -261,7 +261,7 @@ function ModelBreakdown({ byModel, totalCostJPY }: ModelBreakdownProps) {
                 {item.model}
               </Text>
               <Text style={breakdownStyles.modelCost}>
-                {formatJPY(item.costJPY)}
+                {`${item.costJPY.toLocaleString('ja-JP')} pts`}
               </Text>
             </View>
 
@@ -422,7 +422,7 @@ export default function UsageScreen() {
         ) : (
           <>
             {/* ── Hero totals ── */}
-            <Text style={styles.heroAmount}>{formatJPY(totalCostJPY)}</Text>
+            <Text style={styles.heroAmount}>{totalCostJPY.toLocaleString('ja-JP')} pts</Text>
             <Text style={styles.heroMeta}>
               {formatTokens(totalTokens)} トークン
               {requestCount != null ? ` · ${requestCount.toLocaleString('ja-JP')} リクエスト` : ''}
