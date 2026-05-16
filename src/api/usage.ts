@@ -24,6 +24,6 @@ export interface UsageSummary {
 }
 
 export async function getUsageSummary(period: Period = 'month'): Promise<UsageSummary> {
-  const res = await apiClient.get('/api/user/self/usage', { params: { period } });
+  const res = await apiClient.get('/api/user/self/dashboard', { params: { period } });
   return res.data.data ?? { byModel: [], totalTokens: 0, totalCostJPY: 0 };
 }
