@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useBalanceStore } from '../../src/store/balance';
 import { useAuthStore } from '../../src/store/auth';
-import BalanceCard from '../../src/components/BalanceCard';
+import { NotYetAvailableCard } from '../../src/components/coming-soon/NotYetAvailableCard';
 import UsageCard from '../../src/components/UsageCard';
 import ActivityList, { type Activity } from '../../src/components/ActivityList';
 import { apiClient } from '../../src/api/client';
@@ -20,7 +20,7 @@ const QUICK = [
 ] as const;
 
 export default function HomeScreen() {
-  const { balanceJPY, tier, usedTokens, totalTokens, refresh } = useBalanceStore();
+  const { usedTokens, totalTokens, refresh } = useBalanceStore();
   const { user } = useAuthStore();
   const [activities, setActivities] = useState<Activity[]>([]);
 
@@ -64,7 +64,10 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
 
-        <BalanceCard balanceJPY={balanceJPY} tier={tier} onCharge={() => router.push('/(tabs)/charge')} />
+        <NotYetAvailableCard
+          label="残高"
+          reason="JPY 換算は近日対応"
+        />
         <UsageCard usedTokens={usedTokens} totalTokens={totalTokens} />
 
         <Text style={styles.sectionH}>クイックアクション</Text>

@@ -5,7 +5,6 @@ import { router, useFocusEffect } from 'expo-router';
 import { listKeys, deleteKey, type ApiKey } from '../../src/api/keys';
 import KeyCard from '../../src/components/KeyCard';
 import { colors, fonts, radii } from '../../src/constants/tokens';
-import { formatJPY } from '../../src/utils/format';
 
 export default function KeysScreen() {
   const [keys, setKeys]       = useState<ApiKey[]>([]);
@@ -29,7 +28,6 @@ export default function KeysScreen() {
 
   const active   = keys.filter(k => k.status !== 0);
   const inactive = keys.filter(k => k.status === 0);
-  const monthTotal = active.reduce((s, k) => s + (k.month_jpy ?? 0), 0);
 
   return (
     <SafeAreaView style={styles.root}>
@@ -50,7 +48,7 @@ export default function KeysScreen() {
                 {/* Active section */}
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>{`アクティブ（${active.length}）`}</Text>
-                  <Text style={styles.sectionTotal}>合計 {formatJPY(monthTotal)} / 今月</Text>
+                  <Text style={styles.sectionTotal}>合計 — / 今月</Text>
                 </View>
                 {active.map((k) => (
                   <KeyCard key={k.id} apiKey={k} onDelete={handleDelete} />
