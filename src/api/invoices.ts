@@ -1,4 +1,7 @@
-import { apiClient } from './client';
+// Phase 1: vanilla one-hub does not implement 適格請求書 (Japanese qualified
+// invoice). All exports keep their async signatures so callers don't change,
+// but return empty/null synchronously without a network call. Phase 3 rewrites
+// this module against the real backend contract once Phase 2 ships.
 
 export interface Invoice {
   invoice_no:    string;
@@ -14,26 +17,13 @@ export interface InvoiceEmailConfig {
 }
 
 export async function listInvoices(): Promise<Invoice[]> {
-  const res = await apiClient.get('/api/user/self/invoices');
-  return res.data.data ?? [];
+  return [];
 }
 
 export async function getInvoiceEmailConfig(): Promise<InvoiceEmailConfig | null> {
-  try {
-    const res = await apiClient.get('/api/user/self/invoice-config');
-    return res.data.data ?? null;
-  } catch { return null; }
+  return null;
 }
 
-// fetchInvoiceHTML retrieves the rendered 適格請求書 HTML for in-app display.
-// Uses the standard Bearer Authorization header (via apiClient interceptor) so
-// the JWT never appears in a URL query string, server access log, or browser
-// history (the system browser used by Linking.openURL cannot attach headers).
-export async function fetchInvoiceHTML(invoiceNo: string): Promise<string> {
-  const res = await apiClient.get<string>(`/api/user/self/invoices/${encodeURIComponent(invoiceNo)}`, {
-    headers: { Accept: 'text/html' },
-    responseType: 'text',
-    transformResponse: [(data) => data as string],
-  });
-  return res.data;
+export async function fetchInvoiceHTML(_invoiceNo: string): Promise<string> {
+  return '';
 }
