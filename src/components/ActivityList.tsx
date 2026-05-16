@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { colors, fonts, radii } from '../constants/tokens';
-import { formatJPY, formatDate } from '../utils/format';
+import { formatDate } from '../utils/format';
 
 export interface Activity {
   id: number;
@@ -22,7 +22,7 @@ export default function ActivityList({ items }: { items: Activity[] }) {
               {item.tokens.toLocaleString('ja-JP')} tokens · {formatDate(item.createdAt)}
             </Text>
           </View>
-          <Text style={styles.cost}>{formatJPY(item.costJPY)}</Text>
+          <Text style={styles.cost}>{item.costJPY > 0 ? `${item.costJPY.toLocaleString('ja-JP')} pts` : '—'}</Text>
         </View>
       ))}
     </View>
