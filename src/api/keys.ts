@@ -6,22 +6,23 @@ export interface ApiKey {
   key:        string;
   models:     string[];
   created_at: number;
-  status?:    number;      // 1 = active (default), 0 = disabled
-  today_jpy?: number;
-  month_jpy?: number;
-  last_used?: number | null; // unix timestamp or null
+  status?:    number;
+  // JP fields below are populated by Phase 2 backend extensions; null in Phase 1
+  today_jpy?: number | null;
+  month_jpy?: number | null;
+  last_used?: number | null;
 }
 
 export async function listKeys(): Promise<ApiKey[]> {
-  const res = await apiClient.get('/api/user/self/token');
+  const res = await apiClient.get('/api/token/');
   return res.data.data ?? [];
 }
 
 export async function createKey(name: string, models: string[]): Promise<ApiKey> {
-  const res = await apiClient.post('/api/user/self/token', { name, models });
+  const res = await apiClient.post('/api/token/', { name, models });
   return res.data.data;
 }
 
 export async function deleteKey(id: number): Promise<void> {
-  await apiClient.delete(`/api/user/self/token/${id}`);
+  await apiClient.delete(`/api/token/${id}`);
 }
